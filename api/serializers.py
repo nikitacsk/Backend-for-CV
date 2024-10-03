@@ -23,7 +23,7 @@ class WorkExperienceSerializer(serializers.ModelSerializer):
 class EducationSerializer(serializers.ModelSerializer):
     class Meta:
         model = Education
-        fields = ['university', 'year_of_start', 'year_of_end', 'education_link',
+        fields = ['university', 'year_of_start', 'year_of_end',
                   'name_of_publication', 'date_of_publication', 'publication_link']
 
 

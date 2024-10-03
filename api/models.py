@@ -59,7 +59,6 @@ class Education(models.Model):
     university = models.CharField(max_length=255, blank=True, null=True)
     year_of_start = models.IntegerField(blank=True, null=True)
     year_of_end = models.IntegerField(blank=True, null=True)
-    education_link = models.URLField(blank=True, null=True)
     name_of_publication = models.CharField(max_length=255, blank=True, null=True)
     date_of_publication = models.DateField(blank=True, null=True)
     publication_link = models.URLField(blank=True, null=True)
