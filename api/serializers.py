@@ -28,6 +28,16 @@ class EducationSerializer(serializers.ModelSerializer):
 
 
 class PersonalDetailsSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = PersonalDetails
+        fields = [
+            'photos_link', 'full_name', 'date_of_birth', 'gender', 'place_of_residence',
+            'relocate', 'names_of_hobby', 'phone_number', 'email', 'social_media'
+        ]
+
+
+class CVDetailsSerializer(serializers.ModelSerializer):
     summary = SummarySerializer(many=False)
     skills = SkillsSerializer(many=False)
     work_experience = WorkExperienceSerializer(many=False)
