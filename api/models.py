@@ -8,68 +8,62 @@ class PersonalDetails(models.Model):
         ('other', 'Other'),
     ]
 
-    full_name = models.CharField(max_length=255, verbose_name="Full Name", blank=False)
-    gender = models.CharField(max_length=6, choices=GENDER_CHOICES, verbose_name="Gender", blank=False)
-    date_of_birth = models.CharField(max_length=100, verbose_name="Date of Birth", blank=False)
-    place_of_residence = models.CharField(max_length=255, verbose_name="Place of Residence", blank=True, null=True)
-    relocate = models.BooleanField(verbose_name="Relocate", blank=False)
-    names_of_hobby = models.CharField(max_length=255, verbose_name="Names of Hobby", blank=True, null=True)
-    summary = models.TextField(verbose_name="Summary", blank=False)
-    hard_skills = models.TextField(verbose_name="Hard Skills", blank=False)
+    photos_link = models.URLField(blank=True, null=True)
+    full_name = models.CharField(max_length=255, blank=False)
+    date_of_birth = models.CharField(max_length=100, blank=False)
+    gender = models.CharField(max_length=6, choices=GENDER_CHOICES, blank=False)
+    place_of_residence = models.CharField(max_length=255, blank=True, null=True)
+    relocate = models.BooleanField(blank=False, default=False)
+    names_of_hobby = models.CharField(max_length=255, blank=True, null=True)
+    phone_number = models.CharField(max_length=255, blank=True, null=True)
+    email = models.EmailField(blank=False, unique=True, default='<EMAIL>')
+    social_media = models.CharField(max_length=255, blank=True, null=True)
 
     def __str__(self):
         return self.full_name
 
 
-class Contacts(models.Model):
-    email = models.EmailField(verbose_name="Email", blank=True, null=True)
-    phone_number = models.CharField(max_length=20, verbose_name="Phone Number", blank=True, null=True)
-    social_media = models.CharField(max_length=255, verbose_name="Social Media", blank=True, null=True)
-    person = models.ForeignKey(PersonalDetails, on_delete=models.CASCADE,
-                               verbose_name="Person", related_name="contacts")
+class Summary(models.Model):
+    summary = models.TextField(verbose_name="Summary", blank=False)
+    person = models.OneToOneField(PersonalDetails, on_delete=models.CASCADE, related_name="summary")
 
     def __str__(self):
-        return f"Contact for: {self.person.full_name} - {self.email or 'No Email'}"
+        return f"Summary for {self.person.full_name}"
 
 
-class Education(models.Model):
-    university = models.CharField(max_length=255, verbose_name="University", blank=True, null=True)
-    courses = models.TextField(verbose_name="Courses", blank=True, null=True)
-    person = models.ForeignKey(PersonalDetails, on_delete=models.CASCADE,
-                               verbose_name="Person", related_name="education")
-
-    def __str__(self):
-        return self.university or self.courses or "No education"
-
-
-class Publication(models.Model):
-    title_of_publication = models.CharField(max_length=255, verbose_name="Title of Publication", blank=False)
-    date = models.CharField(max_length=100, verbose_name="Date", blank=True, null=True)
-    person = models.ForeignKey(PersonalDetails, on_delete=models.CASCADE,
-                               verbose_name="Person", related_name="publications")
+class Skills(models.Model):
+    hard_skills = models.CharField(max_length=255)
+    soft_skills = models.CharField(max_length=255)
+    name_of_language = models.CharField(max_length=255)
+    level_of_language = models.CharField(max_length=255)
+    certification = models.URLField(blank=True, null=True)
+    person = models.OneToOneField(PersonalDetails, on_delete=models.CASCADE, related_name="skills")
 
     def __str__(self):
-        return self.title_of_publication
-
-
-class ForeignLanguages(models.Model):
-    language_name = models.CharField(max_length=255, verbose_name="Language Name", blank=False)
-    level = models.CharField(max_length=100, verbose_name="Level", blank=False)
-    certificate = models.CharField(max_length=255, verbose_name="Certificate", blank=True, null=True)
-    person = models.ForeignKey(PersonalDetails, on_delete=models.CASCADE,
-                               verbose_name="Person", related_name="foreign_languages")
-
-    def __str__(self):
-        return f"{self.language_name} - {self.level}"
+        return f"Skills for {self.person.full_name}"
 
 
 class WorkExperience(models.Model):
-    position = models.CharField(max_length=255, verbose_name="Position", blank=False)
-    place_of_work = models.CharField(max_length=255, verbose_name="Place of Work", blank=False)
-    onboarding_date = models.CharField(max_length=100, verbose_name="Onboarding Date", blank=False)
-    offboarding_date = models.CharField(max_length=100, verbose_name="Offboarding Date", blank=True, default="-")
-    person = models.ForeignKey(PersonalDetails, on_delete=models.CASCADE,
-                               verbose_name="Person", related_name="work_experience")
+    position = models.CharField(max_length=255, blank=True, null=True)
+    place_of_work = models.CharField(max_length=255, blank=True, null=True)
+    onboarding_date = models.CharField(max_length=100, blank=True, null=True)
+    offboarding_date = models.CharField(max_length=100, blank=True, null=True, default="-")
+    additional_information = models.CharField(max_length=255, blank=True, null=True)
+    person = models.OneToOneField(PersonalDetails, on_delete=models.CASCADE, related_name="work_experience")
 
     def __str__(self):
-        return f"{self.position} at {self.place_of_work}"
+        return f"Work Experience for {self.person.full_name}"
+
+
+class Education(models.Model):
+    university = models.CharField(max_length=255, blank=True, null=True)
+    year_of_start = models.IntegerField(blank=True, null=True)
+    year_of_end = models.IntegerField(blank=True, null=True)
+    education_link = models.URLField(blank=True, null=True)
+    name_of_publication = models.CharField(max_length=255, blank=True, null=True)
+    date_of_publication = models.DateField(blank=True, null=True)
+    publication_link = models.URLField(blank=True, null=True)
+    person = models.OneToOneField(PersonalDetails, on_delete=models.CASCADE, related_name="education")
+
+    def __str__(self):
+        return f"Education for {self.person.full_name}"
