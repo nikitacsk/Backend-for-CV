@@ -7,7 +7,7 @@ from .serializers import SummarySerializer, SkillsSerializer, WorkExperienceSeri
                         CVDetailsSerializer, PersonalDetailsSerializer
 
 
-class PersonalDetailUpdateView(generics.RetrieveUpdateAPIView):
+class PersonalDetailUpdateView(viewsets.ModelViewSet):
     queryset = PersonalDetails.objects.all()
     serializer_class = PersonalDetailsSerializer
 
