@@ -9,7 +9,7 @@ class PersonalDetails(models.Model):
         ('other', 'Other'),
     ]
 
-    photos_link = models.URLField(blank=True, null=True)
+    photos_link = models.TextField(blank=True, null=True)
     full_name = models.CharField(max_length=255, blank=False)
     date_of_birth = models.CharField(max_length=100, blank=False)
     gender = models.CharField(max_length=6, choices=GENDER_CHOICES, blank=False)
